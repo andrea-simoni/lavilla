@@ -1,10 +1,149 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Lavilla</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lavilla – Galleria</title>
+
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 0; padding: 20px; }
+    header { max-width: 1100px; margin: 0 auto 14px; }
+    h1 { margin: 0 0 6px; }
+    p { margin: 0; opacity: .75; }
+
+    .grid{
+      max-width: 1100px;
+      margin: 14px auto 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    figure{
+      margin: 0;
+      border: 1px solid #e6e6e6;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    img, video{
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #111;
+    }
+
+    figcaption{
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    /* Lightbox */
+    dialog{
+      width: min(92vw, 1100px);
+      border: none;
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+    }
+    dialog::backdrop{ background: rgba(0,0,0,.65); }
+    .lightbox{
+      background: #000;
+      position: relative;
+    }
+    .lightbox img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .close{
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.25);
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .hint{ opacity:.7; font-size: 13px; margin-top: 6px; }
+    a.btn{
+      display:inline-block; margin-top:10px;
+      padding:8px 10px; border-radius:10px;
+      border:1px solid #ddd; text-decoration:none; color:inherit;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Lavilla è online 🚀</h1>
+  <header>
+    <h1>Lavilla – Foto & Video</h1>
+    <p>22 foto e 3 video con didascalia.</p>
+    <p class="hint">Suggerimento: clicca su una foto per ingrandirla.</p>
+  </header>
+
+  <section class="grid">
+
+    <!-- FOTO (esempi) -->
+    <figure>
+      <img loading="lazy" src="assets/img/foto01.jpg" alt="Foto 1" data-caption="Foto 1 – Didascalia qui">
+      <figcaption>Foto 1 – Didascalia qui</figcaption>
+    </figure>
+
+    <figure>
+      <img loading="lazy" src="assets/img/foto02.jpg" alt="Foto 2" data-caption="Foto 2 – Didascalia qui">
+      <figcaption>Foto 2 – Didascalia qui</figcaption>
+    </figure>
+
+    <!-- VIDEO (esempi) -->
+    <figure>
+      <video controls preload="metadata" src="assets/video/video01.mp4"></video>
+      <figcaption>Video 1 – Didascalia qui</figcaption>
+    </figure>
+
+    <figure>
+      <video controls preload="metadata" src="assets/video/video02.mp4"></video>
+      <figcaption>Video 2 – Didascalia qui</figcaption>
+    </figure>
+
+    <figure>
+      <video controls preload="metadata" src="assets/video/video03.mp4"></video>
+      <figcaption>Video 3 – Didascalia qui</figcaption>
+    </figure>
+
+  </section>
+
+  <!-- Lightbox -->
+  <dialog id="dlg">
+    <div class="lightbox">
+      <button class="close" id="closeBtn">Chiudi ✕</button>
+      <img id="dlgImg" alt="">
+      <div style="background:#111;color:#fff;padding:10px 12px;font-size:14px" id="dlgCap"></div>
+    </div>
+  </dialog>
+
+  <script>
+    const dlg = document.getElementById('dlg');
+    const dlgImg = document.getElementById('dlgImg');
+    const dlgCap = document.getElementById('dlgCap');
+    const closeBtn = document.getElementById('closeBtn');
+
+    document.querySelectorAll('img[data-caption]').forEach(img => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', () => {
+        dlgImg.src = img.src;
+        dlgImg.alt = img.alt || '';
+        dlgCap.textContent = img.dataset.caption || '';
+        dlg.showModal();
+      });
+    });
+
+    closeBtn.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close(); // clic fuori = chiudi
+    });
+  </script>
 </body>
 </html>
